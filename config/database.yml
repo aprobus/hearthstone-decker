@@ -23,7 +23,9 @@ default: &default
 
 development:
   <<: *default
-  database: deck_finder_development
+  database: hearth_development
+  host: localhost
+  port: 5432
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +59,9 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: deck_finder_test
+  database: hearth
+  host: localhost
+  port: 5432
 
 # Do not keep production credentials in the repository,
 # instead read the configuration from the environment.
