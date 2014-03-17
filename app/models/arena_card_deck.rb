@@ -1,0 +1,3 @@
+class ArenaCardDeck < CardDeck
+
+end

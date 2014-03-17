@@ -25,28 +25,6 @@ describe CardDeck do
       expect(deck.errors[:hero][0]).to include('blank')
     end
 
-    it 'should check name length' do
-      deck = CardDeck.new
-      deck.user = @user
-      deck.hero = Hero.first
-      deck.name = 'a' * 65
-
-      expect(deck).to be_invalid
-      expect(deck.errors[:name]).to have(1).items
-      expect(deck.errors[:name][0]).to include('too long')
-    end
-
-    it 'should check name not blank' do
-      deck = CardDeck.new
-      deck.user = @user
-      deck.hero = Hero.first
-      deck.name = ''
-
-      expect(deck).to be_invalid
-      expect(deck.errors[:name]).to have(1).items
-      expect(deck.errors[:name][0]).to include('blank')
-    end
-
     it 'should only allow 30 cards per deck' do
       deck = CardDeck.new
       deck.user = @user

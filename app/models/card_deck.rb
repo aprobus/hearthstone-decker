@@ -2,7 +2,6 @@ class CardDeck < ActiveRecord::Base
 
   validates :user, :presence => true
   validates :hero, :presence => true
-  validates :name, :length => { :maximum => 64 }, :presence => true
 
   belongs_to :hero
   belongs_to :user
@@ -10,6 +9,12 @@ class CardDeck < ActiveRecord::Base
 
   def limit_number_of_cards(added_card)
     raise Exception.new('Card limit for the deck reached') if cards.size >= 30
+
+    before_card_added(added_card)
+  end
+
+  def before_card_added(added_card)
+
   end
 
 end
