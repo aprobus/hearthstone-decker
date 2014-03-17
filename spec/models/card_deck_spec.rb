@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CardDeck do
 
   before :each do
-    @user = User.create(:email => 'test@test.com', :password => '12345678')
+    @user = User.first || User.create!(:email => 'test@test.com', :password => '12345678')
   end
 
   describe 'Validations' do
@@ -45,6 +45,23 @@ describe CardDeck do
       expect(deck).to be_invalid
       expect(deck.errors[:name]).to have(1).items
       expect(deck.errors[:name][0]).to include('blank')
+    end
+
+    it 'should only allow 30 cards per deck' do
+      deck = CardDeck.new
+      deck.user = @user
+      deck.hero = Hero.first
+      deck.name = 'Test deck'
+      deck.save!
+
+      30.times do
+        card = FactoryGirl.create :card
+        deck.cards << card
+      end
+
+      card = Card.create(:name => 'Too Many Cards')
+      expect { deck.cards << card }.to raise_error
+      expect(deck.cards(true)).to have(30).items
     end
   end
 end
