@@ -8,8 +8,37 @@
 </head>
 <body>
 
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Decker</a>
+        </div>
+
+        <div class="navbar-right">
+          <% if user_signed_in? %>
+              Signed in as <%= current_user.email %>
+              <%= link_to 'Sign out', destroy_user_session_path, :data => { :method => :delete } %>
+          <% else %>
+              <%= link_to 'Sign in', new_user_session_path %>
+          <% end %>
+        </div>
+
+      </div>
+    </nav>
+
+    <% if (notice) %>
+        <div class="alert alert-success notice"><%= notice %></div>
+    <% end %>
+
+    <% if (alert) %>
+        <div class="alert alert-danger"><%= alert %></div>
+    <% end %>
 
     <%= yield %>
 
