@@ -7,11 +7,6 @@ describe ArenaCardDecksController do
   # adjust the attributes here as well.
   let(:valid_attributes) { { :hero_id => Hero.first.id } }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ArenaCardDecksController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
-
   before :all do
     @users = [
       User.first || User.create!(:email => 'test1@test.com', :password => '12345678'),
@@ -141,13 +136,13 @@ describe ArenaCardDecksController do
 
       it 'assigns the requested arena_card_deck as @arena_card_deck' do
         arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id)
-        put :update, {:id => arena_card_deck.to_param, :arena_card_deck => valid_attributes}, valid_session
+        put :update, {:id => arena_card_deck.to_param, :arena_card_deck => valid_attributes}
         assigns(:arena_card_deck).should eq(arena_card_deck)
       end
 
       it 'redirects to the arena_card_deck' do
         arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id)
-        put :update, {:id => arena_card_deck.to_param, :arena_card_deck => valid_attributes}, valid_session
+        put :update, {:id => arena_card_deck.to_param, :arena_card_deck => valid_attributes}
         response.should redirect_to(arena_card_deck)
       end
     end
@@ -165,7 +160,7 @@ describe ArenaCardDecksController do
         arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id)
         # Trigger the behavior that occurs when invalid params are submitted
         ArenaCardDeck.any_instance.stub(:save).and_return(false)
-        put :update, {:id => arena_card_deck.to_param, :arena_card_deck => { :banana => 3 }}, valid_session
+        put :update, {:id => arena_card_deck.to_param, :arena_card_deck => { :banana => 3 }}
         response.should render_template('edit')
       end
     end

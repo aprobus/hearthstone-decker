@@ -13,7 +13,9 @@ class ArenaCardDecksController < ApplicationController
   # GET /arena_card_decks/1
   # GET /arena_card_decks/1.json
   def show
-
+    @game = Game.new
+    @game.card_deck = @arena_card_deck
+    @heroes = Hero.all
   end
 
   # GET /arena_card_decks/new
@@ -82,9 +84,7 @@ class ArenaCardDecksController < ApplicationController
     end
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def arena_card_deck_params
-    params[:arena_card_deck]
     return params.require(:arena_card_deck).permit()
   end
 

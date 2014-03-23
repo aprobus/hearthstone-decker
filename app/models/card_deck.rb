@@ -6,6 +6,7 @@ class CardDeck < ActiveRecord::Base
   belongs_to :hero
   belongs_to :user
   has_and_belongs_to_many :cards, :before_add => :limit_number_of_cards
+  has_many :games
 
   def limit_number_of_cards(added_card)
     raise Exception.new('Card limit for the deck reached') if cards.size >= 30

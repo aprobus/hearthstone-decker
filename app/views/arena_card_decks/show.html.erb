@@ -2,5 +2,45 @@
 
 <h2><%= @arena_card_deck.hero.display_name %></h2>
 
+<%= form_for([@arena_card_deck, @game]) do |f| %>
+    <% if @game.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+
+          <ul>
+            <% @game.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <%= f.collection_select :hero_id, @heroes, :id, :display_name, :selected => @game.hero_id %>
+
+    <%= f.check_box :win_ind %>
+
+    <%= f.hidden_field :mode, :value => 'arena' %>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+
+<table>
+  <thead>
+    <th>Opponent</th>
+    <th>Result</th>
+  </thead>
+
+  <tbody>
+    <% @arena_card_deck.games.each do |game| %>
+        <tr>
+          <td><%= game.hero.display_name %></td>
+          <td><%= game.win_ind ? 'Y' : 'N' %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+
 <%= link_to 'Edit', edit_arena_card_deck_path(@arena_card_deck) %> |
 <%= link_to 'Back', arena_card_decks_path %>
