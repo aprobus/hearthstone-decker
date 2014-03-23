@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :arena_card_decks do
-    resources :games, :shallow => true
+    resources :games, :shallow => true, :only => [:create]
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
