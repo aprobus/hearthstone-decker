@@ -7,7 +7,7 @@ class ArenaCardDecksController < ApplicationController
   # GET /arena_card_decks
   # GET /arena_card_decks.json
   def index
-    @arena_card_decks = ArenaCardDeck.where(:user_id => current_user.id)
+    @arena_card_decks = ArenaCardDeck.where(:user_id => current_user.id).order(:created_at => :desc)
   end
 
   # GET /arena_card_decks/1
@@ -19,10 +19,12 @@ class ArenaCardDecksController < ApplicationController
   # GET /arena_card_decks/new
   def new
     @arena_card_deck = ArenaCardDeck.new
+    @heroes = Hero.all
   end
 
   # GET /arena_card_decks/1/edit
   def edit
+    @heroes = Hero.all
   end
 
   # POST /arena_card_decks

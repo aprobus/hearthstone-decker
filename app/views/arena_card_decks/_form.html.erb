@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  <%= f.collection_radio_buttons :hero_id, @heroes, :id, :display_name, :selected => @arena_card_deck.hero_id %>
+
   <div class="actions">
     <%= f.submit %>
   </div>
