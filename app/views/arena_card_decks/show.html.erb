@@ -1,46 +1,60 @@
-<p id="notice"><%= notice %></p>
 
-<h2><%= @arena_card_deck.hero.display_name %></h2>
+<div class="row">
+    <h2><%= @arena_card_deck.hero.display_name %></h2>
 
-<%= form_for([@arena_card_deck, @game]) do |f| %>
-    <% if @game.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
+    <div style="margin: 10px;">
+      <h3>Add Game</h3>
 
-          <ul>
-            <% @game.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
+      <%= form_for([@arena_card_deck, @game], :html => { :class => 'form-inline' }) do |f| %>
+          <% if @game.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(@game.errors.count, "error") %> prohibited this game from being saved:</h2>
 
-    <%= f.collection_select :hero_id, @heroes, :id, :display_name, :selected => @game.hero_id %>
+                <ul>
+                  <% @game.errors.full_messages.each do |msg| %>
+                      <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
 
-    <%= f.check_box :win_ind %>
+          <div class="form-group">
+            <label for="game_hero_id" class="sr-only">Opponent</label>
+            <div class="col-sm-10">
+              <%= f.collection_select :hero_id, @heroes, :id, :display_name, { :selected => @game.hero_id }, { :class => 'form-control' } %>
+            </div>
+          </div>
 
-    <%= f.hidden_field :mode, :value => 'arena' %>
+          <div class="checkbox">
+            <label>
+              <%= f.check_box :win_ind %> Win
+            </label>
+          </div>
 
-    <div class="actions">
-      <%= f.submit %>
+          <%= f.hidden_field :mode, :value => 'arena' %>
+
+          <%= f.submit 'Add Game', :class => 'btn btn-default' %>
+      <% end %>
+
     </div>
-<% end %>
 
-<table>
-  <thead>
-    <th>Opponent</th>
-    <th>Result</th>
-  </thead>
+    <table class="table table-striped">
+      <thead>
+        <th>Opponent</th>
+        <th>Result</th>
+      </thead>
 
-  <tbody>
-    <% @arena_card_deck.games.each do |game| %>
-        <tr>
-          <td><%= game.hero.display_name %></td>
-          <td><%= game.win_ind ? 'Y' : 'N' %></td>
-        </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @arena_card_deck.games.each do |game| %>
+            <tr>
+              <td><%= game.hero.display_name %></td>
+              <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<%= link_to 'Edit', edit_arena_card_deck_path(@arena_card_deck) %> |
-<%= link_to 'Back', arena_card_decks_path %>
+    <%= link_to 'Edit', edit_arena_card_deck_path(@arena_card_deck) %> |
+    <%= link_to 'Back', arena_card_decks_path %>
+
+</div>
