@@ -1,12 +1,12 @@
 FactoryGirl.define do
   factory :regular_card_deck do
-    user User.first
+    user_id User.first.id
     name 'Test deck'
-    hero Hero.first
+    hero_id Hero.first.id
   end
 
   factory :arena_card_deck do
-    user User.first
-    hero Hero.first
+    user_id User.first.id
+    hero_id Hero.first.id
   end
 end

@@ -1,0 +1,23 @@
+<h1>Listing arena_card_decks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @arena_card_decks.each do |arena_card_deck| %>
+      <tr>
+        <td><%= link_to 'Show', arena_card_deck %></td>
+        <td><%= link_to 'Edit', edit_arena_card_deck_path(arena_card_deck) %></td>
+        <td><%= link_to 'Destroy', arena_card_deck, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Arena card deck', new_arena_card_deck_path %>
