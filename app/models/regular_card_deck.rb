@@ -8,4 +8,8 @@ class RegularCardDeck < CardDeck
     end
   end
 
+  def add_games?
+    true
+  end
+
 end

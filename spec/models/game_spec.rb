@@ -85,5 +85,20 @@ describe Game do
         expect(game.errors[:card_deck][0]).to include('not a valid deck for game mode')
       end
     end
+
+    it 'should check if deck can add games' do
+      deck = FactoryGirl.create :arena_card_deck
+      deck.num_games_lost = 3
+      deck.save!
+
+      game = Game.new
+      game.user = @user
+      game.hero = Hero.first
+      game.card_deck = deck
+
+      expect(game).to be_invalid
+      expect(game.errors[:base]).to have(1).items
+      expect(game.errors[:base][0]).to include('Cannot add games')
+    end
   end
 end

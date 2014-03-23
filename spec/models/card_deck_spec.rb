@@ -41,5 +41,41 @@ describe CardDeck do
       expect { deck.cards << card }.to raise_error
       expect(deck.cards(true)).to have(30).items
     end
+
+    it 'should not allow negative num of games lost' do
+      deck = CardDeck.new
+      deck.user = @user
+      deck.hero = Hero.first
+      deck.name = 'Test deck'
+      deck.num_games_won = 0
+      deck.num_games_lost = -1
+
+      expect(deck).to be_invalid
+      expect(deck.errors[:num_games_lost]).to have(1).items
+      expect(deck.errors[:num_games_lost][0]).to include('greater than')
+    end
+
+    it 'should not allow negative num of games won' do
+      deck = CardDeck.new
+      deck.user = @user
+      deck.hero = Hero.first
+      deck.name = 'Test deck'
+      deck.num_games_won = -1
+      deck.num_games_lost = 0
+
+      expect(deck).to be_invalid
+      expect(deck.errors[:num_games_won]).to have(1).items
+      expect(deck.errors[:num_games_won][0]).to include('greater than')
+    end
+  end
+
+  describe '#num_games_total' do
+    it 'should equal the sum of wins and losses' do
+      deck = CardDeck.new
+      deck.num_games_won = 3
+      deck.num_games_lost = 4
+
+      expect(deck.num_games_total).to eq(7)
+    end
   end
 end

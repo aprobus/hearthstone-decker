@@ -4,17 +4,20 @@ class GamesController < ApplicationController
   before_filter :authenticate_user!
 
   def create
-    @game = Game.new(game_params)
-    @game.user = current_user
-    @game.hero = Hero.find_by_id(params[:game][:hero_id])
-    @game.card_deck = @card_deck
+    @game = @card_deck.add_game do |game|
+      game.user = current_user
+      game.hero = Hero.find_by_id(params[:game][:hero_id])
+      game.assign_attributes(game_params)
+    end
 
     respond_to do |format|
-      if @game.save!
+      if @game.persisted?
         format.html { redirect_to @card_deck, notice: 'Game was successfully created.' }
         format.json { render action: 'show', status: :created, location: @card_deck }
       else
-        format.html { render action: 'new' }
+        @heroes = Hero.all
+        @arena_card_deck = @card_deck
+        format.html { render template: '/arena_card_decks/show' }
         format.json { render json: @game.errors, status: :unprocessable_entity }
       end
     end

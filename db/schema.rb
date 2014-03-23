@@ -11,18 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140323152932) do
+ActiveRecord::Schema.define(version: 20140323231431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "card_decks", force: true do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "hero_id",    null: false
+    t.integer  "user_id",                    null: false
+    t.integer  "hero_id",                    null: false
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "type"
+    t.integer  "num_games_won",  default: 0
+    t.integer  "num_games_lost", default: 0
   end
 
   add_index "card_decks", ["user_id"], name: "index_card_decks_on_user_id", using: :btree
@@ -54,6 +56,8 @@ ActiveRecord::Schema.define(version: 20140323152932) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "games", ["card_deck_id"], name: "index_games_on_card_deck_id", using: :btree
 
   create_table "heroes", force: true do |t|
     t.string   "name",       null: false

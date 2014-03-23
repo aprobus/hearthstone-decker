@@ -7,6 +7,7 @@ class Game < ActiveRecord::Base
   validates :hero, :presence => true
   validates :mode, :inclusion => { :within => MODES, :message => '%{value} is not a valid game mode' }
   validate :check_deck_type
+  validate :can_add_games_to_deck
 
   belongs_to :user
   belongs_to :card_deck
@@ -21,6 +22,12 @@ class Game < ActiveRecord::Base
 
     if mode && card_deck && card_deck.class != mode_to_deck_types[mode]
       errors[:card_deck] << 'not a valid deck for game mode'
+    end
+  end
+
+  def can_add_games_to_deck
+    if card_deck && !card_deck.add_games?
+      errors[:base] << 'Cannot add games to this deck'
     end
   end
 
