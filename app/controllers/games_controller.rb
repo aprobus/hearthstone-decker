@@ -15,9 +15,14 @@ class GamesController < ApplicationController
         format.html { redirect_to @card_deck, notice: 'Game was successfully created.' }
         format.json { render action: 'show', status: :created, location: @card_deck }
       else
+        #TODO: Make this more generic
+        deck_class_string = @card_deck.class.name.underscore
+        template = "/#{deck_class_string.pluralize}/show"
+        instance_variable_set("@#{deck_class_string}", @card_deck)
+
         @heroes = Hero.all
         @arena_card_deck = @card_deck
-        format.html { render template: '/arena_card_decks/show' }
+        format.html { render template: template }
         format.json { render json: @game.errors, status: :unprocessable_entity }
       end
     end
