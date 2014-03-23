@@ -45,7 +45,7 @@
       </thead>
 
       <tbody>
-        <% @arena_card_deck.games.each do |game| %>
+        <% @arena_card_deck.games.order(:created_at => :desc).each do |game| %>
             <tr>
               <td><%= game.hero.display_name %></td>
               <td><%= game.win_ind ? 'Win' : 'Loss' %></td>

@@ -55,4 +55,12 @@ class CardDeck < ActiveRecord::Base
     game
   end
 
+  def win_rate
+    if num_games_total <= 0
+      0.0
+    else
+      num_games_won.to_f / num_games_total.to_f * 100.0
+    end
+  end
+
 end

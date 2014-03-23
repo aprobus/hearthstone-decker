@@ -1,27 +1,36 @@
-<h1>Arena Decks</h1>
+<div class="row">
+    <h1>Arena Decks</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Hero</th>
-      <th>Date</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Hero</th>
+          <th>Start Date</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win Rate</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @arena_card_decks.each do |arena_card_deck| %>
-      <tr>
-        <td><%= arena_card_deck.hero.display_name %></td>
-        <td><%= arena_card_deck.created_at %></td>
-        <td><%= link_to 'Show', arena_card_deck %></td>
-        <td><%= link_to 'Edit', edit_arena_card_deck_path(arena_card_deck) %></td>
-        <td><%= link_to 'Destroy', arena_card_deck, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @arena_card_decks.each do |arena_card_deck| %>
+          <tr>
+            <td><%= arena_card_deck.hero.display_name %></td>
+            <td><%= arena_card_deck.created_at.to_formatted_s(:date) %></td>
+            <td><%= arena_card_deck.num_games_won %></td>
+            <td><%= arena_card_deck.num_games_lost %></td>
+            <td><%= arena_card_deck.win_rate %>%</td>
+            <td><%= link_to 'Show', arena_card_deck %></td>
+            <td><%= link_to 'Edit', edit_arena_card_deck_path(arena_card_deck) %></td>
+            <td><%= link_to 'Destroy', arena_card_deck, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<br>
+    <br>
 
-<%= link_to 'New Arena card deck', new_arena_card_deck_path %>
+    <%= link_to 'New Arena card deck', new_arena_card_deck_path %>
+
+</div>
