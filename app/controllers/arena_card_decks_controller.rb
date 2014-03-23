@@ -3,6 +3,7 @@ require 'forbidden_error'
 class ArenaCardDecksController < ApplicationController
   before_action :set_arena_card_deck, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user!
+  before_filter :set_active_tab
 
   # GET /arena_card_decks
   # GET /arena_card_decks.json
@@ -86,6 +87,10 @@ class ArenaCardDecksController < ApplicationController
 
   def arena_card_deck_params
     return params.require(:arena_card_deck).permit()
+  end
+
+  def set_active_tab
+    @active_tab = :arena
   end
 
 end

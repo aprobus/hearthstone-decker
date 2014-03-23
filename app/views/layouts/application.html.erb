@@ -22,7 +22,7 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><%= link_to 'Arena', arena_card_decks_path %></li>
+        <li class="<%= @active_tab == :arena ? 'active' : 'inactive'%>"><%= link_to 'Arena', arena_card_decks_path %></li>
       </ul>
 
       <div class="navbar-right">
