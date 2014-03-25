@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe ArenaCardDecksController do
+  include Grant::Status
 
   # This should return the minimal set of attributes required to create a valid
   # ArenaCardDeck. As you add validations to ArenaCardDeck, be sure to
@@ -13,15 +14,17 @@ describe ArenaCardDecksController do
       User.second || User.create!(:email => 'test2@test.com', :password => '12345678')
     ]
 
-    @decks = [
-        FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id),
-        FactoryGirl.create(:arena_card_deck, :user_id => @users[1].id)
-    ]
+    without_grant do
+      @decks = [
+          FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id),
+          FactoryGirl.create(:arena_card_deck, :user_id => @users[1].id)
+      ]
+    end
   end
 
   describe 'GET index' do
     it 'assigns all arena_card_decks as @arena_card_decks' do
-      sign_in @users[0]
+      authenticate_as @users[0]
       get :index, {}
       expect(response).to be_ok
       assigns(:arena_card_decks).each do |deck|
@@ -38,21 +41,23 @@ describe ArenaCardDecksController do
   end
 
   describe 'GET show' do
+
     it 'assigns the requested arena_card_deck as @arena_card_deck' do
-      sign_in @users[0]
+      authenticate_as @users[0]
       get :show, {:id => @decks[0].id.to_param}
       expect(assigns(:arena_card_deck)).to eq(@decks[0])
     end
 
     it 'should not show decks that do not belong to user' do
-      sign_in @users[1]
+      authenticate_as @users[1]
+      Grant::User.current_user = @users[1]
       expect {
-        get :show, {:id => @decks[0].id.to_param}
-      }.to raise_exception ActionController::ForbiddenError
+        get :show, { :id => @decks[0].id.to_param }
+      }.to raise_exception{|error| expect(error).to be_a(Grant::Error)}
     end
 
     it 'should return 404 for unknown decks' do
-      sign_in @users[1]
+      authenticate_as @users[1]
       expect {
         get :show, {:id => 12345678}
       }.to raise_exception ActiveRecord::RecordNotFound
@@ -61,7 +66,7 @@ describe ArenaCardDecksController do
 
   describe 'GET new' do
     it 'assigns a new arena_card_deck as @arena_card_deck' do
-      sign_in @users[0]
+      authenticate_as @users[0]
       get :new
       expect(assigns(:arena_card_deck)).to be_a_new(ArenaCardDeck)
     end
@@ -69,7 +74,7 @@ describe ArenaCardDecksController do
 
   describe 'GET edit' do
     it 'assigns the requested arena_card_deck as @arena_card_deck' do
-      sign_in @users[0]
+      authenticate_as @users[0]
       arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id)
       get :edit, {:id => arena_card_deck.to_param}
       expect(assigns(:arena_card_deck)).to eq(arena_card_deck)
@@ -78,7 +83,7 @@ describe ArenaCardDecksController do
 
   describe 'POST create' do
     before :each do
-      sign_in @users[0]
+      authenticate_as @users[0]
     end
 
     describe 'with valid params' do
@@ -119,7 +124,7 @@ describe ArenaCardDecksController do
 
   describe 'PUT update' do
     before :each do
-      sign_in @users[0]
+      authenticate_as @users[0]
     end
 
     describe 'with valid params' do
@@ -166,25 +171,32 @@ describe ArenaCardDecksController do
     end
 
     describe 'with invalid user' do
+
       it 'raises error when not the assigned user' do
-        sign_in @users[1]
+        authenticate_as @users[1]
+        Grant::User.current_user = @users[1]
         warlock = Hero.find_by_name('warlock')
         shaman = Hero.find_by_name('shaman')
-        arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id, :hero_id => warlock.id)
+        arena_card_deck = nil
+        without_grant do
+          arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id, :hero_id => warlock.id)
+        end
 
         expect {
           put :update, {:id => arena_card_deck.to_param, :arena_card_deck => { 'hero_id' => shaman.id }}
-        }.to raise_exception ActionController::ForbiddenError
+        }.to raise_exception{|error| expect(error).to be_a(Grant::Error)}
 
-        arena_card_deck.reload
-        expect(arena_card_deck.hero).to eq(warlock)
+        without_grant do
+          arena_card_deck.reload
+          expect(arena_card_deck.hero).to eq(warlock)
+        end
       end
     end
   end
 
   describe 'DELETE destroy' do
     before :each do
-      sign_in @users[0]
+      authenticate_as @users[0]
     end
 
     it 'destroys the requested arena_card_deck' do

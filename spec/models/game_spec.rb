@@ -1,13 +1,22 @@
 require 'spec_helper'
 
 describe Game do
+  include Grant::Status
 
   before :all do
-    @user = User.create(:email => 'test@test.com', :password => '12345678')
-    @deck = FactoryGirl.create(:regular_card_deck)
+    @user = User.first || User.create!(:email => 'test@test.com', :password => '12345678')
+    @other_user = User.second || User.create!(:email => 'test2@test.com', :password => '12345678')
+
+    without_grant do
+      @deck = FactoryGirl.create(:regular_card_deck)
+    end
   end
 
   describe 'Validations' do
+    before :each do
+      authenticate_as @user
+    end
+
     it 'should require a user' do
       game = Game.new
       game.card_deck = @deck
@@ -87,6 +96,7 @@ describe Game do
     end
 
     it 'should check if deck can add games' do
+      authenticate_as @user
       deck = FactoryGirl.create :arena_card_deck
       deck.num_games_lost = 3
       deck.save!

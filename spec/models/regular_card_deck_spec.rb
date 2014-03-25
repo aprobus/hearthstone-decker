@@ -4,6 +4,7 @@ describe RegularCardDeck do
 
   before :each do
     @user = User.first || User.create!(:email => 'test@test.com', :password => '12345678')
+    authenticate_as @user
   end
 
   describe 'Validations' do

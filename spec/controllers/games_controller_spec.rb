@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe GamesController do
+  include Grant::Status
 
   before :all do
     @users = [
@@ -8,10 +9,12 @@ describe GamesController do
         User.second || User.create!(:email => 'test2@test.com', :password => '12345678')
     ]
 
-    @decks = [
-        FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id),
-        FactoryGirl.create(:arena_card_deck, :user_id => @users[1].id)
-    ]
+    without_grant do
+      @decks = [
+          FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id),
+          FactoryGirl.create(:arena_card_deck, :user_id => @users[1].id)
+      ]
+    end
 
     @warlock = Hero.find_by_name 'warlock'
   end
@@ -44,9 +47,11 @@ describe GamesController do
     end
 
     it 'should not change anything when adding game fails' do
-      @decks[0].num_games_won = 0
-      @decks[0].num_games_lost = 3
-      @decks[0].save!
+      without_grant do
+        @decks[0].num_games_won = 0
+        @decks[0].num_games_lost = 3
+        @decks[0].save!
+      end
 
       expect {
         post :create, :arena_card_deck_id => @decks[0].id, :game => { :win_ind => 1, :hero_id => @warlock.to_param, :mode => 'arena' }

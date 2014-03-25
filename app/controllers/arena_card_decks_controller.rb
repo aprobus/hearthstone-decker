@@ -1,4 +1,3 @@
-require 'forbidden_error'
 
 class ArenaCardDecksController < ApplicationController
   before_action :set_arena_card_deck, only: [:show, :edit, :update, :destroy]
@@ -79,10 +78,6 @@ class ArenaCardDecksController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_arena_card_deck
     @arena_card_deck = ArenaCardDeck.find(params[:id])
-
-    if @arena_card_deck.user_id != current_user.id
-      raise ActionController::ForbiddenError.new
-    end
   end
 
   def arena_card_deck_params
