@@ -10,7 +10,6 @@ class CardDeck < ActiveRecord::Base
   has_and_belongs_to_many :cards, :before_add => :limit_number_of_cards
   has_many :games
 
-  #grant(:create) { true }
   grant(:create, :find, :update, :destroy) { |user, model, action| !user.nil? && model.user_id == user.id }
 
   def limit_number_of_cards(added_card)

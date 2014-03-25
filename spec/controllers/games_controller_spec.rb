@@ -21,7 +21,7 @@ describe GamesController do
 
   describe 'POST create' do
     before :each do
-      sign_in @users[0]
+      authenticate_as @users[0]
     end
 
     it 'should should create a game' do
@@ -60,6 +60,19 @@ describe GamesController do
       @decks[0].reload
       expect(@decks[0].num_games_lost).to eq(3)
       expect(@decks[0].num_games_won).to eq(0)
+    end
+
+    it 'should fail when user is not authorized' do
+      authenticate_as @users[1]
+
+      expect do
+        post :create, :arena_card_deck_id => @decks[0].id, :game => { :win_ind => 1, :hero_id => @warlock.to_param, :mode => 'arena' }
+      end.to raise_error{|error| expect(error).to be_a(Grant::Error)}
+
+      authenticate_as @users[0]
+      @decks[0].reload
+      expect(@decks[0].num_games_won).to eq(0)
+      expect(@decks[0].num_games_lost).to eq(0)
     end
   end
 

@@ -14,6 +14,8 @@ class Game < ActiveRecord::Base
   belongs_to :card_deck
   belongs_to :hero
 
+  grant(:create, :find, :update, :destroy) { |user, model, action| !user.nil? && model.user_id == user.id }
+
   def check_deck_type
     mode_to_deck_types = {
       'ranked' => RegularCardDeck,

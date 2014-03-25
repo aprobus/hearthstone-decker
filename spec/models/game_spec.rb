@@ -126,4 +126,27 @@ describe Game do
       expect(game.errors[:card_deck][0]).to include('not the owner')
     end
   end
+
+  describe 'Permissions' do
+    before :each do
+      @game = Game.new
+      @game.user_id = @user.id
+    end
+
+    it 'should not allow other users to create' do
+      expect(@game.granted?(:create, @other_user)).to be_false
+    end
+
+    it 'should not allow other users to find' do
+      expect(@game.granted?(:create, @other_user)).to be_false
+    end
+
+    it 'should not allow other users to update' do
+      expect(@game.granted?(:update, @other_user)).to be_false
+    end
+
+    it 'should not allow other users to destroy' do
+      expect(@game.granted?(:destroy, @other_user)).to be_false
+    end
+  end
 end
