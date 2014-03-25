@@ -15,7 +15,7 @@
 
       <tbody>
         <% @arena_card_decks.each do |arena_card_deck| %>
-          <tr>
+          <tr class="<%= arena_card_deck.add_games? ? 'info' : 'inactive' %>">
             <td><%= arena_card_deck.hero.display_name %></td>
             <td><%= arena_card_deck.created_at.to_formatted_s(:date) %></td>
             <td><%= arena_card_deck.num_games_won %></td>
