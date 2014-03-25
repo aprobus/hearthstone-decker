@@ -20,7 +20,7 @@
             <td><%= arena_card_deck.created_at.to_formatted_s(:date) %></td>
             <td><%= arena_card_deck.num_games_won %></td>
             <td><%= arena_card_deck.num_games_lost %></td>
-            <td><%= arena_card_deck.win_rate %>%</td>
+            <td><%= number_to_percentage(arena_card_deck.win_rate) %></td>
             <td><%= link_to 'Show', arena_card_deck %></td>
             <td><%= link_to 'Edit', edit_arena_card_deck_path(arena_card_deck) %></td>
             <td><%= link_to 'Destroy', arena_card_deck, method: :delete, data: { confirm: 'Are you sure?' } %></td>
