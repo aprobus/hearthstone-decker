@@ -35,6 +35,8 @@ end
 
 gem 'grant'
 
+gem 'foreigner'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

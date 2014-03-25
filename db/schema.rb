@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140323231431) do
+ActiveRecord::Schema.define(version: 20140325022930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,5 +82,17 @@ ActiveRecord::Schema.define(version: 20140323231431) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  add_foreign_key "card_decks", "heroes", name: "card_decks_hero_id_fk"
+  add_foreign_key "card_decks", "users", name: "card_decks_user_id_fk"
+
+  add_foreign_key "card_decks_cards", "card_decks", name: "card_decks_cards_card_deck_id_fk"
+  add_foreign_key "card_decks_cards", "cards", name: "card_decks_cards_card_id_fk"
+
+  add_foreign_key "cards", "heroes", name: "cards_hero_id_fk"
+
+  add_foreign_key "games", "card_decks", name: "games_card_deck_id_fk"
+  add_foreign_key "games", "heroes", name: "games_hero_id_fk"
+  add_foreign_key "games", "users", name: "games_user_id_fk"
 
 end
