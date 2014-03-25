@@ -96,7 +96,6 @@ describe Game do
     end
 
     it 'should check if deck can add games' do
-      authenticate_as @user
       deck = FactoryGirl.create :arena_card_deck
       deck.num_games_lost = 3
       deck.save!
@@ -109,6 +108,22 @@ describe Game do
       expect(game).to be_invalid
       expect(game.errors[:base]).to have(1).items
       expect(game.errors[:base][0]).to include('Cannot add games')
+    end
+
+    it 'should check if deck has same owner' do
+      deck = FactoryGirl.create(:arena_card_deck, :user_id => @user.id)
+
+      authenticate_as @other_user
+
+      game = Game.new
+      game.user = @other_user
+      game.hero = Hero.first
+      game.card_deck = deck
+      game.mode = 'arena'
+
+      expect(game).to be_invalid
+      expect(game.errors[:card_deck]).to have(1).items
+      expect(game.errors[:card_deck][0]).to include('not the owner')
     end
   end
 end

@@ -8,6 +8,7 @@ class Game < ActiveRecord::Base
   validates :mode, :inclusion => { :within => MODES, :message => '%{value} is not a valid game mode' }
   validate :check_deck_type
   validate :can_add_games_to_deck
+  validate :owner_also_owns_deck
 
   belongs_to :user
   belongs_to :card_deck
@@ -28,6 +29,12 @@ class Game < ActiveRecord::Base
   def can_add_games_to_deck
     if card_deck && !card_deck.add_games?
       errors[:base] << 'Cannot add games to this deck'
+    end
+  end
+
+  def owner_also_owns_deck
+    if user_id && card_deck && user_id != card_deck.user_id
+      errors[:card_deck] << 'You are not the owner of this card deck'
     end
   end
 
