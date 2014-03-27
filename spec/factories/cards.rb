@@ -5,5 +5,6 @@ FactoryGirl.define do
     card_type 'minion'
     mana 1
     health 2
+    rarity 'common'
   end
 end
