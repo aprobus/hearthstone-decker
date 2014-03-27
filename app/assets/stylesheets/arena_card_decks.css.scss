@@ -1,0 +1,38 @@
+$bar-color: #1F65B5;
+$bar-darken: 30;
+
+.bar {
+  fill: $bar-color;
+}
+
+.bar:hover {
+  fill: darken($bar-color, 30);  
+}
+
+.bar:last-child {
+  fill: complement($bar-color);  
+}
+
+.bar:last-child:hover {
+  fill: darken(complement($bar-color), $bar-darken);  
+}
+
+.axis {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+#avgWinsChart {
+  margin-bottom: 10px;
+}
+

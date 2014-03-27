@@ -25,28 +25,72 @@
 </div>
 
 <div class="row">
-  <h3>Average Wins Per Arena</h3>
-  <table class="table">
-    <thead>
-      <th>Hero</th>
-      <th>Average Wins</th>
-    </thead>
-
-    <tbody>
-      <% @avg_wins.by_hero.each do |hero_stats| %>
-        <tr>
-          <td><%= hero_stats[:hero].display_name %></td>
-          <td><%= hero_stats[:value] %></td>
-        </tr>
-      <% end %>
-    </tbody>
-
-    <tfoot>
-      <tr>
-        <td>All</td>
-        <td><%= @avg_wins.total %></td>
-      </tr>
-    </tfoot>
-  </table>
+  <div id="avgWinsChart"></div>
 </div>
+
+<script type="text/javascript">
+(function() {
+  
+  var avg_win_data = [];
+  <% @avg_wins.by_hero.each do |stat| %>
+  avg_win_data.push({
+    hero_name: '<%= stat[:hero].display_name %>',
+    value: <%= stat[:value] %>  
+  });
+  <% end %>
+  avg_win_data.push({
+    hero_name: 'Overall',
+    value: <%= @avg_wins.total %>  
+  });
+
+  var margin = {top: 40, right: 20, bottom: 30, left: 40};
+  var width = $("#avgWinsChart").width() - margin.left - margin.right;
+  var height = 500 - margin.top - margin.bottom;
+
+  var svg = d3.select("#avgWinsChart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var xValues = avg_win_data.map(function(d) { return d.hero_name; });
+  var maxY = d3.max(avg_win_data, function(d) { return d.value; });
+
+  var x = d3.scale.ordinal().rangeRoundBands([0, width], .1).domain(xValues);
+  var y = d3.scale.linear().range([height, 0]).domain([0, maxY]);
+
+  var xAxis = d3.svg.axis().scale(x).orient("bottom");
+  var yAxis = d3.svg.axis().scale(y).orient("left");
+
+  svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+
+  svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Avg Wins");
+
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .attr("font-size", "24px")
+    .text("Average Arena Wins");
+
+  svg.selectAll(".bar")
+    .data(avg_win_data)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d.hero_name); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d.value); }).attr("height", function(d) { return height - y(d.value); });
+})();
+
+</script>
 
