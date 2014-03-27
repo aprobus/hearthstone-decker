@@ -1,0 +1,52 @@
+<div class="row">
+  <h3>Number Of Arenas</h3>
+  <table class="table">
+    <thead>
+      <th>Hero</th>
+      <th># Arenas</th>
+    </thead>
+
+    <tbody>
+      <% @num_decks.by_hero.each do |hero_stats| %>
+        <tr>
+          <td><%= hero_stats[:hero].display_name %></td>
+          <td><%= hero_stats[:value] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td>All</td>
+        <td><%= @num_decks.total %></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="row">
+  <h3>Average Wins Per Arena</h3>
+  <table class="table">
+    <thead>
+      <th>Hero</th>
+      <th>Average Wins</th>
+    </thead>
+
+    <tbody>
+      <% @avg_wins.by_hero.each do |hero_stats| %>
+        <tr>
+          <td><%= hero_stats[:hero].display_name %></td>
+          <td><%= hero_stats[:value] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td>All</td>
+        <td><%= @avg_wins.total %></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+

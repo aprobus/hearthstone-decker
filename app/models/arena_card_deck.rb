@@ -10,4 +10,7 @@ class ArenaCardDeck < CardDeck
     num_games_lost < MAX_LOSSES && num_games_won < MAX_WINS
   end
 
+  scope :completed, -> { where("num_games_lost = #{MAX_LOSSES} or num_games_won = #{MAX_WINS}") }
+
 end
+

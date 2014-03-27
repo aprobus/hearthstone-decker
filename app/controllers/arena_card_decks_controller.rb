@@ -1,5 +1,8 @@
+require 'num_decks_stat'
+require 'avg_wins_stat'
 
 class ArenaCardDecksController < ApplicationController
+
   before_action :set_arena_card_deck, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user!
   before_filter :set_active_tab
@@ -71,6 +74,13 @@ class ArenaCardDecksController < ApplicationController
       format.html { redirect_to arena_card_decks_url }
       format.json { head :no_content }
     end
+  end
+
+  def stats
+    arena_card_decks = ArenaCardDeck.completed.where(:user_id => current_user.id)
+
+    @num_decks = DeckStats::NumDecksStat.new(arena_card_decks)
+    @avg_wins = DeckStats::AvgWinsStat.new(arena_card_decks)
   end
 
   private

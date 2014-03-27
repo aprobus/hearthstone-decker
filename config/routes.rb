@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
 
+  get 'arena_card_decks/stats' => 'arena_card_decks#stats'
   resources :arena_card_decks do
     resources :games, :shallow => true, :only => [:create]
   end
