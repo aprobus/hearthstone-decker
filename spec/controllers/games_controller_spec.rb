@@ -76,4 +76,61 @@ describe GamesController do
     end
   end
 
+  describe 'DELETE destroy' do
+    before :each do
+      authenticate_as @users[0]
+
+      @arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id)
+      @game = @arena_card_deck.add_game do |game|
+        game.win_ind = true
+        game.mode = 'arena'
+        game.hero_id = Hero.first.id
+        game.user = @users[0]
+      end
+      expect(@game).to be_persisted
+    end
+
+    it 'destroys the requested arena_card_deck' do
+      expect {
+        delete :destroy, {:id => @game.to_param}
+      }.to change(Game, :count).by(-1)
+    end
+
+    it 'redirects to the arena_card_decks list' do
+      delete :destroy, {:id => @game.to_param}
+      expect(response).to redirect_to(@arena_card_deck)
+    end
+
+    it 'updates num wins' do
+      delete :destroy, {:id => @game.to_param}
+
+      @arena_card_deck.reload
+      expect(@arena_card_deck.num_games_won).to eq(0)
+    end
+
+    it 'updates num losses' do
+      @game.win_ind = false
+      @game.save!
+
+      @arena_card_deck.num_games_won = 0
+      @arena_card_deck.num_games_lost = 1
+      @arena_card_deck.save!
+
+      delete :destroy, {:id => @game.to_param}
+
+      @arena_card_deck.reload
+      expect(@arena_card_deck.num_games_lost).to eq(0)
+    end
+
+    it 'should not allow other users to delete' do
+      authenticate_as @users[1]
+      expect {
+        delete :destroy, {:id => @game.to_param}
+      }.to raise_error{|error| expect(error).to be_a(Grant::Error)}
+
+      expect(Game.exists?(@game)).to be_true
+    end
+  end
+
 end
+

@@ -42,6 +42,7 @@
       <thead>
         <th>Opponent</th>
         <th>Result</th>
+        <th></th>
       </thead>
 
       <tbody>
@@ -49,6 +50,7 @@
             <tr>
               <td><%= game.hero.display_name %></td>
               <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
+              <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             </tr>
         <% end %>
       </tbody>

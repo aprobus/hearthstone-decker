@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get 'arena_card_decks/stats' => 'arena_card_decks#stats'
   resources :arena_card_decks do
-    resources :games, :shallow => true, :only => [:create]
+    resources :games, :shallow => true, :only => [:create, :destroy]
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

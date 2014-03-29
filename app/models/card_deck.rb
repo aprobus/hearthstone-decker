@@ -57,6 +57,19 @@ class CardDeck < ActiveRecord::Base
     game
   end
 
+  def delete_game(game)
+    if game.win_ind
+      self.num_games_won = self.num_games_won - 1
+    else
+      self.num_games_lost = self.num_games_lost - 1
+    end
+
+    CardDeck.transaction do
+      self.save!
+      game.destroy
+    end
+  end
+
   def win_rate
     if num_games_total <= 0
       0.0

@@ -28,6 +28,14 @@ class GamesController < ApplicationController
     end
   end
 
+  def destroy
+    game = Game.find(params[:id])
+    card_deck = game.card_deck
+    card_deck.delete_game(game)
+
+    redirect_to card_deck
+  end
+
   private
 
   def set_card_deck
