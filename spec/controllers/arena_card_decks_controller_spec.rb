@@ -211,6 +211,23 @@ describe ArenaCardDecksController do
       delete :destroy, {:id => arena_card_deck.to_param}
       response.should redirect_to(arena_card_decks_url)
     end
+
+    it 'destroys related games' do
+      arena_card_deck = FactoryGirl.create(:arena_card_deck, :user_id => @users[0].id)
+      game = arena_card_deck.add_game do |game|
+        game.win_ind = true
+        game.mode = 'arena'
+        game.hero_id = Hero.first.id
+        game.user = @users[0]
+      end
+      expect(game).to be_persisted
+
+      expect {
+        delete :destroy, {:id => arena_card_deck.to_param}
+      }.to change(ArenaCardDeck, :count).by(-1)
+
+      expect(Game.exists?(game)).to be_false
+    end
   end
 
 end

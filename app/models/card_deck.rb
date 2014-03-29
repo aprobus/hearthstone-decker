@@ -8,7 +8,7 @@ class CardDeck < ActiveRecord::Base
   belongs_to :hero
   belongs_to :user
   has_and_belongs_to_many :cards, :before_add => :limit_number_of_cards
-  has_many :games
+  has_many :games, :dependent => :destroy
 
   grant(:create, :find, :update, :destroy) { |user, model, action| !user.nil? && model.user_id == user.id }
 
