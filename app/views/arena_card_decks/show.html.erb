@@ -1,6 +1,6 @@
 
 <div class="row">
-    <h2><%= @arena_card_deck.hero.display_name %></h2>
+    <h2><%= @arena_card_deck.hero.display_name %> (<%= @arena_card_deck.num_games_won %>-<%= @arena_card_deck.num_games_lost %>)</h2>
 
     <% if @arena_card_deck.add_games? %>
         <div style="margin: 10px;">
