@@ -1,8 +1,6 @@
-<%= form_for(@arena_card_deck) do |f| %>
+<%= form_for(@arena_card_deck, :html => { :class => 'form-horizontal', :role => 'form' }) do |f| %>
   <% if @arena_card_deck.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@arena_card_deck.errors.count, "error") %> prohibited this arena_card_deck from being saved:</h2>
-
       <ul>
       <% @arena_card_deck.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
@@ -11,9 +9,11 @@
     </div>
   <% end %>
 
-  <%= f.collection_radio_buttons :hero_id, @heroes, :id, :display_name, :selected => @arena_card_deck.hero_id %>
+  <div style="margin-bottom: 10px"">
+    <%= f.collection_select :hero_id, @heroes, :id, :display_name, { :selected => @arena_card_deck.hero_id } %>
+  </div>
 
-  <div class="actions">
+  <div class="actions" style="margin-bottom: 10px">
     <%= f.submit %>
   </div>
 <% end %>

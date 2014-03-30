@@ -11,7 +11,10 @@
     </div>
   <% end %>
 
-  <%= f.collection_radio_buttons :hero_id, @heroes, :id, :display_name, :selected => @regular_card_deck.hero_id %>
+  <div class="form-group"">
+    <label for="regular_card_deck_hero_id">Hero</label>
+    <%= f.collection_select :hero_id, @heroes, :id, :display_name, { :selected => @regular_card_deck.hero_id }, { :class => 'form-control' } %>
+  </div>
 
   <div class="form-group">
     <label for="name">Name</label>
@@ -21,4 +24,7 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+
+  <br />
 <% end %>
+
