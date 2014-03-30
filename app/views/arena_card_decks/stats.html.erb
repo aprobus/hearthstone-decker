@@ -1,30 +1,10 @@
-<div class="row">
-  <h3>Number Of Arenas</h3>
-  <table class="table">
-    <thead>
-      <th>Hero</th>
-      <th># Arenas</th>
-    </thead>
-
-    <tbody>
-      <% @num_decks.by_hero.each do |hero_stats| %>
-        <tr>
-          <td><%= hero_stats[:hero].display_name %></td>
-          <td><%= hero_stats[:value] %></td>
-        </tr>
-      <% end %>
-    </tbody>
-
-    <tfoot>
-      <tr>
-        <td>All</td>
-        <td><%= @num_decks.total %></td>
-      </tr>
-    </tfoot>
-  </table>
+<div class="row text-center">
+  <h2>Arena Runs By Hero</h2>
+  <div id="numDecksChart"></div>
 </div>
 
-<div class="row">
+<div class="row text-center">
+  <h2>Average Arena Wins</h2>
   <div id="avgWinsChart"></div>
 </div>
 
@@ -43,7 +23,7 @@
     value: <%= @avg_wins.total %>  
   });
 
-  var margin = {top: 40, right: 20, bottom: 30, left: 40};
+  var margin = {top: 20, right: 20, bottom: 30, left: 40};
   var width = $("#avgWinsChart").width() - margin.left - margin.right;
   var height = 500 - margin.top - margin.bottom;
 
@@ -75,13 +55,6 @@
     .style("text-anchor", "end")
     .text("Avg Wins");
 
-  svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", 0 - (margin.top / 2))
-    .attr("text-anchor", "middle")
-    .attr("font-size", "24px")
-    .text("Average Arena Wins");
-
   svg.selectAll(".bar")
     .data(avg_win_data)
     .enter()
@@ -90,6 +63,87 @@
     .attr("x", function(d) { return x(d.hero_name); })
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(d.value); }).attr("height", function(d) { return height - y(d.value); });
+})();
+
+(function() {
+  var data = [];
+  <% @num_decks.by_hero.each do |stat| %>
+    data.push({
+      hero_name: '<%= stat[:hero].display_name %>',
+      value: <%= stat[:value] %>  
+    });
+  <% end %>
+
+  var width = $("#numDecksChart").width();
+  var height = 500;
+  var radius = Math.min(width, height) / 2;
+  
+  var color = d3.scale.ordinal()
+      .range(["#D23F3F", "#354F8D", "#D2D23F", "#D28E3F", "#56358F", "#81BF3A", "#D2B23F", "#972D83", "#2A8B6E"]);  
+
+  var arc = d3.svg.arc()
+      .outerRadius(radius - 10)
+      .innerRadius(0);
+
+  var pie = d3.layout.pie()
+      .sort(null)
+      .value(function(d) { return d.value; });
+
+  var svg = d3.select("#numDecksChart")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g");
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+      .enter().append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.hero_name); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return formatChartText(d.data); });
+
+  var legend = svg.selectAll(".legend")
+      .data(color.domain().slice().reverse())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  var legendX = width / 2 + radius;
+  var blockSize = 18;
+  legend.append("rect")
+      .attr("x", legendX)
+      .attr("width", blockSize)
+      .attr("height", blockSize)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", legendX + blockSize + 2)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "start")
+      .text(formatLegendText);
+
+  function formatLegendText(heroName) {
+    var numRuns = data.filter(function(dataItem) { return dataItem.hero_name === heroName; })[0].value;
+    return heroName + ': ' + numRuns;  
+  }
+
+  function formatChartText(data) {
+    if(data.value > 0) {
+      return data.hero_name;
+    } else {
+      return '';  
+    }
+  }
 })();
 
 </script>
