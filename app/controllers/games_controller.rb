@@ -39,7 +39,11 @@ class GamesController < ApplicationController
   private
 
   def set_card_deck
-    @card_deck = CardDeck.find(params[:arena_card_deck_id])
+    param_key = params.keys.find do |key|
+      key.to_s.include?('card_deck_id')
+    end
+
+    @card_deck = CardDeck.find(params[param_key])
 
     if @card_deck.user_id != current_user.id
       raise ActionController::ForbiddenError.new

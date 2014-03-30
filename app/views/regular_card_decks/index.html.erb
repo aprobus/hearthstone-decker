@@ -1,0 +1,36 @@
+<div class="row">
+    <h1>Regular Card Decks</h1>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Hero</th>
+          <th>Start Date</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @regular_card_decks.each do |regular_card_deck| %>
+          <tr>
+            <td><%= regular_card_deck.name %></td>
+            <td><%= regular_card_deck.hero.display_name %></td>
+            <td><%= regular_card_deck.created_at.to_formatted_s(:date) %></td>
+            <td><%= regular_card_deck.num_games_won %></td>
+            <td><%= regular_card_deck.num_games_lost %></td>
+            <td><%= link_to 'Show', regular_card_deck %></td>
+            <td><%= link_to 'Edit', edit_regular_card_deck_path(regular_card_deck) %></td>
+            <td><%= link_to 'Destroy', regular_card_deck, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <br>
+
+    <%= link_to 'New Card Deck', new_regular_card_deck_path %>
+
+</div>

@@ -1,0 +1,74 @@
+<div class="row">
+    <h2><%= @regular_card_deck.name %> (<%= @regular_card_deck.hero.display_name %>)</h2>
+
+    <% if @regular_card_deck.add_games? %>
+        <div style="margin: 10px;">
+            <h3>Add Game</h3>
+
+            <%= form_for([@regular_card_deck, @game], :html => { :class => 'form-inline' }) do |f| %>
+                <% if @game.errors.any? %>
+                    <div id="error_explanation" class="alert alert-danger">
+                        <ul>
+                            <% @game.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+
+                <div class="form-group">
+                    <label for="game_hero_id" class="sr-only">Opponent</label>
+                    <div class="col-sm-10">
+                        <%= f.collection_select :hero_id, @heroes, :id, :display_name, { :selected => @game.hero_id }, { :class => 'form-control' } %>
+                    </div>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <%= f.check_box :win_ind %> Win
+                    </label>
+                </div>
+
+                <div class="radio">
+                  <label>
+                    <%= f.radio_button :mode, 'normal', :checked => true %>
+                    Normal
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <%= f.radio_button :mode, 'ranked' %>
+                    Ranked
+                  </label>
+                </div>
+
+                <%= f.submit 'Add Game', :class => 'btn btn-default' %>
+            <% end %>
+
+        </div>
+    <% end %>
+
+    <table class="table table-striped">
+      <thead>
+        <th>Opponent</th>
+        <th>Mode</th>
+        <th>Result</th>
+        <th></th>
+      </thead>
+
+      <tbody>
+        <% @regular_card_deck.games.order(:created_at => :desc).each do |game| %>
+            <tr>
+              <td><%= game.hero.display_name %></td>
+              <td><%= game.mode.titleize %></td>
+              <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
+              <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= link_to 'Edit', edit_regular_card_deck_path(@regular_card_deck) %> |
+    <%= link_to 'Back', regular_card_decks_path %>
+
+</div>

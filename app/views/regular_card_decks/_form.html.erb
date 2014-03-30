@@ -1,0 +1,24 @@
+<%= form_for(@regular_card_deck) do |f| %>
+  <% if @regular_card_deck.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@regular_card_deck.errors.count, "error") %> prohibited this Card Deck from being saved:</h2>
+
+      <ul>
+      <% @regular_card_deck.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.collection_radio_buttons :hero_id, @heroes, :id, :display_name, :selected => @regular_card_deck.hero_id %>
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <%= f.text_field :name, :class => 'form-control' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
