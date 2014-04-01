@@ -16,7 +16,6 @@
 /log
 /tmp
 
-config/secrets.yml
 .idea
 *.swp
 
