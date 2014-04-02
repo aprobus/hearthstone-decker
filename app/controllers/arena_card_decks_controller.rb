@@ -7,6 +7,12 @@ class ArenaCardDecksController < CardDecksBaseController
     ArenaCardDeck
   end
 
+  def index
+    super
+    @arena_card_deck = ArenaCardDeck.new
+    @heroes = Hero.all
+  end
+
   def stats
     arena_card_decks = ArenaCardDeck.completed.where(:user_id => current_user.id)
 
