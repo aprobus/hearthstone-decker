@@ -17,7 +17,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Decker</a>
+      <a class="navbar-brand" href="/">Decker</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -26,14 +26,14 @@
         <li class="<%= @active_tab == :regular_card_deck ? 'active' : 'inactive'%>"><%= link_to 'Regular', regular_card_decks_path %></li>
       </ul>
 
-      <div class="navbar-right">
+      <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
-            Signed in as <%= current_user.email %>
-            <%= link_to 'Sign out', destroy_user_session_path, :data => { :method => :delete } %>
+            <li class="navbar-text">Signed in as <%= current_user.email %></li>
+            <li><%= link_to 'Sign out', destroy_user_session_path, :data => { :method => :delete } %></li>
         <% else %>
-            <%= link_to 'Sign in', new_user_session_path %>
+            <li><%= link_to 'Sign in', new_user_session_path %></li>
         <% end %>
-      </div>
+      </ul>
     </div>
 
   </div>
