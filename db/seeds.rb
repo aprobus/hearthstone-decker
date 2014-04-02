@@ -14,6 +14,10 @@ mage = Hero.find_by_name('mage') || Hero.create!(:name => 'mage')
 druid = Hero.find_by_name('druid') || Hero.create!(:name => 'druid')
 rogue = Hero.find_by_name('rogue') || Hero.create!(:name => 'rogue')
 paladin = Hero.find_by_name('paladin') || Hero.create!(:name => 'paladin')
+priest = Hero.find_by_name('priest') || Hero.create!(:name => 'priest')
+
+user = User.create!(:email => 'test@test.com', :password => '123456789')
+user2 = User.create!(:email => 'test1@test.com', :password => '123456789')
 
 Card.create!(:name => 'Rockbiter Weapon', :card_type => 'weapon', :hero_id => shaman.id, 
   :mana => '1', :card_text => 'Give a character +3 attack this turn', :rarity => 'soul_bound')
@@ -29,6 +33,4 @@ Card.create!(:name => 'Unleash The Hounds', :card_type => 'spell', :hero_id => h
 
 Card.create!(:name => 'Chillwind Yeti', :card_type => 'minion', 
   :mana => '4', :damage => 4, :health => 5, :rarity => 'common')
-
-
 

@@ -14,3 +14,4 @@ FactoryGirl.define do
     num_games_won 0
   end
 end
+

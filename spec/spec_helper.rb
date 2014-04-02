@@ -4,6 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'minitest'
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'factory_girl_rails'
 
 require 'authentication_helper'
 

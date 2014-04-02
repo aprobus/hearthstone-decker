@@ -8,3 +8,4 @@ FactoryGirl.define do
     rarity 'common'
   end
 end
+
