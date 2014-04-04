@@ -10,7 +10,7 @@ class ArenaCardDecksController < CardDecksBaseController
   def index
     super
     @arena_card_deck = ArenaCardDeck.new
-    @heroes = Hero.all
+    @heroes = Hero.order(:name => :asc)
   end
 
   def stats

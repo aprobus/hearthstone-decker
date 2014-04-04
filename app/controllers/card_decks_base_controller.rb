@@ -1,6 +1,7 @@
 class CardDecksBaseController < ApplicationController
 
   before_action :set_card_deck, only: [:show, :edit, :update, :destroy]
+  before_action :set_heroes, only: [:show, :edit, :update, :new]
   before_filter :authenticate_user!
   before_filter :set_active_tab
 
@@ -19,17 +20,13 @@ class CardDecksBaseController < ApplicationController
 
   def show
     @game = Game.new
-    #@game.card_deck = @arena_card_deck
-    @heroes = Hero.all
   end
 
   def new
     instance_variable_set("@#{model_sym}", controller_model.new)
-    @heroes = Hero.all
   end
 
   def edit
-    @heroes = Hero.all
   end
 
   def create
@@ -77,6 +74,10 @@ class CardDecksBaseController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_card_deck
     instance_variable_set("@#{model_sym}", controller_model.find(params[:id]))
+  end
+
+  def set_heroes
+    @heroes = Hero.order(:name => :asc)
   end
 
   def model_params

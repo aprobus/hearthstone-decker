@@ -20,7 +20,7 @@ class GamesController < ApplicationController
         template = "/#{deck_class_string.pluralize}/show"
         instance_variable_set("@#{deck_class_string}", @card_deck)
 
-        @heroes = Hero.all
+        @heroes = Hero.order(:name => :asc)
         @arena_card_deck = @card_deck
         format.html { render template: template }
         format.json { render json: @game.errors, status: :unprocessable_entity }
