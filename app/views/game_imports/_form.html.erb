@@ -1,11 +1,13 @@
 <%= form_for(@game_import) do |f| %>
-  <% if @game_import.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@game_import.errors.count, "error") %> prohibited this game_import from being saved:</h2>
-
+  <% if @game_import.errors.any? || !@import_errors.empty? %>
+    <div class="alert alert-danger">
       <ul>
       <% @game_import.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
+      <% end %>
+
+      <% @import_errors.each do |import_error| %>
+        <li><%= import_error %></li>
       <% end %>
       </ul>
     </div>

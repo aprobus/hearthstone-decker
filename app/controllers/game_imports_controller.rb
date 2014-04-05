@@ -6,6 +6,8 @@ class GameImportsController < ApplicationController
   before_action :set_game_import, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user!
 
+  FILE_PARSERS = [GameFileParser::Csv]
+
   # GET /game_imports
   # GET /game_imports.json
   def index
@@ -20,6 +22,7 @@ class GameImportsController < ApplicationController
   # GET /game_imports/new
   def new
     @game_import = GameImport.new
+    @import_errors = []
   end
 
   # GET /game_imports/1/edit
@@ -29,23 +32,36 @@ class GameImportsController < ApplicationController
   # POST /game_imports
   # POST /game_imports.json
   def create
-    @game_import = GameImport.new(game_import_params)
-    @game_import.user = current_user
+    @import_errors = []
 
     user_file = uploaded_file
+    user_filename = user_file.nil? ? '' : user_file.original_filename
     if !user_file.nil?
-      @game_import.file_name = user_file.original_filename
-      logger.info '----------------------------'
-      logger.info user_file.class.name
-      logger.info user_file.content_type
-      logger.info '----------------------------'
+      logger.info "User #{current_user.email} uploaded file #{user_file.class.name} with size #{user_file.size} bytes"
+
+      parser = FILE_PARSERS.find do |parser|
+        parser.can_parse?(user_file.content_type)
+      end
+
+      if parser.nil?
+        @import_errors << 'Unable to parse file'
+      else
+        parser_instance = parser.new(user_file.tempfile, current_user)
+        @game_import, @import_errors = parser_instance.process do |game_import|
+          game_import.file_name = user_filename
+        end
+      end
+    else
+      @import_errors << 'No file given'
     end
 
     respond_to do |format|
-      if @game_import.save
+      if !@game_import.nil?
         format.html { redirect_to @game_import, notice: 'Game import was successfully created.' }
         format.json { render action: 'show', status: :created, location: @game_import }
       else
+        @game_import = GameImport.new
+        @game_import.file_name = user_filename
         format.html { render action: 'new' }
         format.json { render json: @game_import.errors, status: :unprocessable_entity }
       end

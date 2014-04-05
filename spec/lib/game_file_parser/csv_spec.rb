@@ -28,8 +28,9 @@ describe GameFileParser::Csv do
       end
 
       parser = GameFileParser::Csv.new(file, @user)
-      result = parser.parse
+      result, errors = parser.process
 
+      expect(errors).to be_empty
       expect(result).not_to be_nil
       expect(result.games).to have(1).items
       expect(result.card_decks).to have(1).items
@@ -54,8 +55,9 @@ describe GameFileParser::Csv do
       end
 
       parser = GameFileParser::Csv.new(file, @user)
-      result = parser.parse
+      result, errors = parser.process
 
+      expect(errors).to be_empty
       expect(result).not_to be_nil
       expect(result.games).to have(4).items
       expect(result.card_decks).to have(2).items
@@ -63,6 +65,25 @@ describe GameFileParser::Csv do
       result.games.each do |game|
         expect(game.win_ind).to be_false
       end
+    end
+
+    it 'should not fail for 2 invalid lines in a row' do
+      num_card_decks = CardDeck.count
+      num_games = Game.count
+      file = generate_csv_file do |csv|
+        csv << ['Apr-3', 'Shaman', 'Warlock', 'Arena', 'Loss']
+        csv << ['Apr-3', '2', 'Warlock', 'Arena', 'N']
+        csv << ['Apr-3', '2', 'Warlock', 'Arena', 'No']
+      end
+
+      parser = nil
+      expect{ parser = GameFileParser::Csv.new(file, @user) }.not_to change{GameImport.count}
+      result, errors = parser.process
+
+      expect(errors).to have(2).items
+      expect(result).to be_nil
+      expect(CardDeck.count).to eq(num_card_decks)
+      expect(Game.count).to eq(num_games)
     end
 
     def generate_csv_file
