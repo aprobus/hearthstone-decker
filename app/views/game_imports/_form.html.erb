@@ -1,0 +1,23 @@
+<%= form_for(@game_import) do |f| %>
+  <% if @game_import.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@game_import.errors.count, "error") %> prohibited this game_import from being saved:</h2>
+
+      <ul>
+      <% @game_import.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <label for="game_import_file">CSV File</label>
+    <%= f.file_field :file %>
+    <p class="help-block">File must be in comma seperated value (.csv) format.</p>
+  </div>
+
+  <div class="actions">
+    <%= f.submit 'Import' %>
+  </div>
+<% end %>

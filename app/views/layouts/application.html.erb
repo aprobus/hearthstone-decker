@@ -24,6 +24,7 @@
       <ul class="nav navbar-nav">
         <li class="<%= @active_tab == :arena_card_deck ? 'active' : 'inactive'%>"><%= link_to 'Arena', arena_card_decks_path %></li>
         <li class="<%= @active_tab == :regular_card_deck ? 'active' : 'inactive'%>"><%= link_to 'Regular', regular_card_decks_path %></li>
+        <li class="<%= @active_tab == :game_imports ? 'active' : 'inactive'%>"><%= link_to 'Import', game_imports_path %></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">

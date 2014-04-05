@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :game_imports
+
   devise_for :users
 
   get 'arena_card_decks/stats' => 'arena_card_decks#stats'

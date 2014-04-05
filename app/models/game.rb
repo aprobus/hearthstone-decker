@@ -13,6 +13,7 @@ class Game < ActiveRecord::Base
   belongs_to :user
   belongs_to :card_deck
   belongs_to :hero
+  belongs_to :game_import
 
   grant(:create, :find, :update, :destroy) { |user, model, action| !user.nil? && model.user_id == user.id }
 

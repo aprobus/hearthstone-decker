@@ -7,6 +7,7 @@ class CardDeck < ActiveRecord::Base
 
   belongs_to :hero
   belongs_to :user
+  belongs_to :game_import
   has_and_belongs_to_many :cards, :before_add => :limit_number_of_cards
   has_many :games, :dependent => :destroy
 

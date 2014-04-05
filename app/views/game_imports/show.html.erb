@@ -1,0 +1,25 @@
+<div>
+  File Name: <%= @game_import.file_name %><br/>
+  Imported On: <%= @game_import.created_at %>
+</div>
+
+<h2>Games Imported</h2>
+<table class="table">
+  <thead>
+    <th>Game Type</th>
+    <th>Opponent</th>
+    <th>Result</th>
+  </thead>
+
+  <tbody>
+    <% @game_import.games.each do |game| %>
+      <tr>
+        <td><%= game.card_deck.type %></td>
+        <td><%= game.hero.display_name %></td>
+        <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back', game_imports_path %>
