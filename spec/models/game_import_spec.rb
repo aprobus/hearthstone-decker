@@ -43,5 +43,35 @@ describe GameImport do
       expect(Game.exists?(game)).to be_false
     end
   end
+
+  describe 'Permissions' do
+    before :each do
+      @user = User.first
+      @other_user = User.second
+
+      authenticate_as @user
+      @game_import = GameImport.create!(:file_name => 'test.csv', :user => @user)
+    end
+
+    it 'should not allow creation of imports for other users' do
+      expect {
+        GameImport.create!(:file_name => 'test.csv', :user => @other_user)
+      }.to raise_error
+    end
+
+    it 'should not allow other users to view' do
+      authenticate_as @other_user
+      expect {
+        GameImport.find(@game_import.id)  
+      }.to raise_error
+    end
+
+    it 'should not allow other users to destroy' do
+      authenticate_as @other_user
+      expect {
+        GameImport.destroy(@game_import.id)  
+      }.to raise_error
+    end
+  end
 end
 

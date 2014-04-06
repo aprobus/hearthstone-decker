@@ -6,6 +6,8 @@ class GameImport < ActiveRecord::Base
   has_many :games, :dependent => :destroy
   has_many :card_decks, :dependent => :destroy
 
+  grant(:create, :find, :update, :destroy) { |user, model, action| !user.nil? && model.user_id == user.id }
+
   def num_games_imported
     self.games.count
   end

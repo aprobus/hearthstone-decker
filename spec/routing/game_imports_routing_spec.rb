@@ -15,16 +15,8 @@ describe GameImportsController do
       get("/game_imports/1").should route_to("game_imports#show", :id => "1")
     end
 
-    it "routes to #edit" do
-      get("/game_imports/1/edit").should route_to("game_imports#edit", :id => "1")
-    end
-
     it "routes to #create" do
       post("/game_imports").should route_to("game_imports#create")
-    end
-
-    it "routes to #update" do
-      put("/game_imports/1").should route_to("game_imports#update", :id => "1")
     end
 
     it "routes to #destroy" do
@@ -33,3 +25,4 @@ describe GameImportsController do
 
   end
 end
+
