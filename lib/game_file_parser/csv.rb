@@ -22,7 +22,7 @@ module GameFileParser
       key_maps[:result] = :win_ind
       key_maps[:game_type] = :mode
 
-      results = SmarterCSV.process(@file.path, :key_mapping => key_maps)
+      results = SmarterCSV.process(@file.path, :key_mapping => key_maps, :row_sep => :auto)
       results.each_with_index do |result, i|
         result[:line_num] = i + 2 # Header + 1 based index
       end
