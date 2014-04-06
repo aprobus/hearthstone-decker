@@ -40,10 +40,52 @@ describe GameFileParser::Csv do
       expect(created_deck.hero.name).to eq('shaman')
       expect(created_deck.num_games_won).to eq(1)
       expect(created_deck.num_games_lost).to eq(0)
+      expect(created_deck.created_at).to eq(Date.new(2014, 04, 03))
 
       created_game = result.games[0]
       expect(created_game.hero.name).to eq('warlock')
       expect(created_game.win_ind).to be_true
+      expect(created_game.created_at).to eq(Date.new(2014, 04, 03))
+    end
+
+    it 'should ignore illegal dates' do
+      file = generate_csv_file do |csv|
+        csv << ['Apr-33', 'Shaman', 'Warlock', 'Arena', 'Win']
+      end
+
+      parser = GameFileParser::Csv.new(file, @user)
+      result, errors = parser.process
+
+      expect(errors).to be_empty
+      expect(result).not_to be_nil
+      expect(result.games).to have(1).items
+      expect(result.card_decks).to have(1).items
+
+      created_deck = result.card_decks[0]
+      expect(created_deck.created_at).to be_within(2.seconds).of(Time.now)
+
+      created_game = result.games[0]
+      expect(created_game.created_at).to be_within(2.seconds).of(Time.now)
+    end
+
+    it 'should work correctly with no date field' do
+      file = generate_csv_file(['Class', 'Opponent', 'Game Type', 'Result']) do |csv|
+        csv << ['Shaman', 'Warlock', 'Arena', 'Win']
+      end
+
+      parser = GameFileParser::Csv.new(file, @user)
+      result, errors = parser.process
+
+      expect(errors).to be_empty
+      expect(result).not_to be_nil
+      expect(result.games).to have(1).items
+      expect(result.card_decks).to have(1).items
+
+      created_deck = result.card_decks[0]
+      expect(created_deck.created_at).to be_within(2.seconds).of(Time.now)
+
+      created_game = result.games[0]
+      expect(created_game.created_at).to be_within(2.seconds).of(Time.now)
     end
 
     it 'should create multiple decks for arena' do
@@ -86,9 +128,9 @@ describe GameFileParser::Csv do
       expect(Game.count).to eq(num_games)
     end
 
-    def generate_csv_file
+    def generate_csv_file(headers = ['Date', 'Class', 'Opponent', 'Game Type', 'Result'])
       csv_str = CSV.generate do |csv|
-        csv << ['Date', 'Class', 'Opponent', 'Game Type', 'Result']
+        csv << headers
         yield csv
       end
       file = Tempfile.new('test')
