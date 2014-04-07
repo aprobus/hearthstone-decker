@@ -109,6 +109,29 @@ describe GameFileParser::Csv do
       end
     end
 
+    it 'should handling missing games' do
+      file = generate_csv_file do |csv|
+        csv << ['Apr-3', 'Shaman', 'Warlock', 'Arena', 'Loss']
+        csv << ['Apr-3', 'Shaman', 'Warlock', 'Arena', 'N']
+        csv << ['Apr-3', 'Priest', 'Warlock', 'Arena', 'No']
+      end
+
+      parser = GameFileParser::Csv.new(file, @user)
+      result, errors = parser.process
+
+      expect(errors).to be_empty
+      expect(result).not_to be_nil
+      expect(result.games).to have(3).items
+      expect(result.card_decks).to have(2).items
+
+      decks = result.card_decks.order(:id => :asc)
+      expect(decks[0].hero.name).to eq('shaman')
+      expect(decks[0].games.count).to eq(2)
+
+      expect(decks[1].hero.name).to eq('priest')
+      expect(decks[1].games.count).to eq(1)
+    end
+
     it 'should not fail for 2 invalid lines in a row' do
       num_card_decks = CardDeck.count
       num_games = Game.count
