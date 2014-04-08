@@ -17,6 +17,7 @@ class GameImportsController < ApplicationController
   # GET /game_imports/1
   # GET /game_imports/1.json
   def show
+    @heroes = Hero.all
   end
 
   # GET /game_imports/new

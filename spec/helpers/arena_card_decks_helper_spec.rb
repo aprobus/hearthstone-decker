@@ -1,15 +1,19 @@
 require 'spec_helper'
 
-# Specs in this file have access to a helper object that includes
-# the ArenaCardDecksHelper. For example:
-#
-# describe ArenaCardDecksHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 describe ArenaCardDecksHelper do
 
+  describe '#hero_name' do
+    it 'should work for models with hero_id attribute' do
+      deck = ArenaCardDeck.new(:hero => Hero.find_by_name(:shaman))
+      result = hero_name(deck)
+      expect(result).to eq('Shaman')
+    end
+
+    it 'should work for heroes' do
+      shaman = Hero.find_by_name(:shaman)
+      result = hero_name(shaman)
+      expect(result).to eq('Shaman')
+    end
+  end
 end
+

@@ -10,6 +10,8 @@ module GameFileParser
         return nil, ['No file given']
       end
 
+      @heroes = Hero.all
+
       # Key Mappings
       # :hero_name = [:hero_name, :class]
       # :opponent_hero_name = [:opponent_hero_name, :opponent]
@@ -106,7 +108,7 @@ module GameFileParser
 
     def find_hero_for_sym(opts, sym)
       if opts.include?(sym) && opts[sym].is_a?(String)
-        Hero.find_by_name(opts[sym].downcase)
+        @heroes.find{|hero| hero.name == opts[sym].downcase}
       else
         nil
       end

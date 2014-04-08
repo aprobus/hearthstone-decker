@@ -14,8 +14,8 @@
   <tbody>
     <% @game_import.games.each do |game| %>
       <tr>
-        <td><%= game.card_deck.type %></td>
-        <td><%= game.hero.display_name %></td>
+        <td><%= game.mode.humanize %></td>
+        <td><%= hero_name(game) %></td>
         <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
       </tr>
     <% end %>
