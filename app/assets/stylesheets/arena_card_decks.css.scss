@@ -9,11 +9,11 @@ $bar-darken: 30;
   fill: darken($bar-color, 30);  
 }
 
-.bar:last-child {
+.bar:last-of-type {
   fill: complement($bar-color);  
 }
 
-.bar:last-child:hover {
+.bar:last-of-type:hover {
   fill: darken(complement($bar-color), $bar-darken);  
 }
 

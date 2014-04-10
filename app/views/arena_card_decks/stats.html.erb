@@ -55,6 +55,7 @@
     .style("text-anchor", "end")
     .text("Avg Wins");
 
+
   svg.selectAll(".bar")
     .data(avg_win_data)
     .enter()
@@ -62,7 +63,26 @@
     .attr("class", "bar")
     .attr("x", function(d) { return x(d.hero_name); })
     .attr("width", x.rangeBand())
-    .attr("y", function(d) { return y(d.value); }).attr("height", function(d) { return height - y(d.value); });
+    .attr("y", function(d) { return y(d.value); })
+    .attr("height", function(d) { return height - y(d.value); });
+    
+  svg.selectAll(".valueLabel")
+    .data(avg_win_data)
+    .enter()
+    .append("text")
+    .attr('text-anchor', 'middle')
+    .attr('class', 'valueLabel')
+    .attr("x", function(d, i) { return x(x.domain()[i]) + x.rangeBand() / 2; })
+    .attr("y", function(d) { return y(d.value) - 2; })
+    .text(formatValueText);
+
+  function formatValueText(d) {
+    if (d.value > 0) {
+      return d.value.toFixed(1); 
+    } else {
+      return '';  
+    }
+  }
 })();
 
 (function() {
