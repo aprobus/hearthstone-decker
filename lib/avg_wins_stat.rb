@@ -22,7 +22,7 @@ module DeckStats
     def avg_num_wins_for_decks(decks)
       total_wins = decks.reduce(0){|sum, deck| sum + deck.num_games_won }
       total_runs = [1, decks.length].max
-      total_wins / total_runs
+      total_wins.to_f / total_runs.to_f
     end
   end
 end

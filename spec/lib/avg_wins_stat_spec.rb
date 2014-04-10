@@ -38,6 +38,15 @@ describe DeckStats::AvgWinsStat do
       expect(avg_wins.total).to eq(6)
     end 
 
+    it 'should find correct answer with fractions' do
+      decks = []
+      decks << FactoryGirl.create(:arena_card_deck, :num_games_won => 2, :num_games_lost => 3)       
+      decks << FactoryGirl.create(:arena_card_deck, :num_games_won => 9, :num_games_lost => 3)       
+
+      avg_wins = DeckStats::AvgWinsStat.new(decks)
+      expect(avg_wins.total).to be_within(0.00001).of(5.5)
+    end 
+
     it 'should avoid divide by 0 errors' do
       avg_wins = DeckStats::AvgWinsStat.new([])
       expect(avg_wins.total).to eq(0)
