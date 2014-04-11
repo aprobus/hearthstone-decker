@@ -1,6 +1,6 @@
 <div class="row">
 
-  <div style="border: 1px solid #D9D9D9; border-radius: 3px; padding: 3px;">
+  <div class="border-small">
     <%= form_for(@arena_card_deck, :html => { :class => 'form-inline', :role => 'form' }) do |f| %>
       <div class="form-group">
         <h4>New Deck:</h4>
@@ -40,6 +40,8 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= paginate @arena_card_decks %>
 
   <br>
 

@@ -14,7 +14,7 @@ class CardDecksBaseController < ApplicationController
   end
 
   def index
-    decks = controller_model.where(:user_id => current_user.id).order(:created_at => :desc)
+    decks = controller_model.where(:user_id => current_user.id).order(:created_at => :desc).page(params[:page])
     instance_variable_set("@#{models_sym}", decks)
   end
 
