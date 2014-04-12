@@ -15,8 +15,8 @@
 
       <tbody>
         <% @regular_card_decks.each do |regular_card_deck| %>
-          <tr>
-            <td><%= link_to(regular_card_deck.name, regular_card_deck) %></td>
+          <tr class="link-row" data-href="<%= url_for regular_card_deck %>">
+            <td><%= regular_card_deck.name %></td>
             <td><%= regular_card_deck.hero.display_name %></td>
             <td><%= regular_card_deck.created_at.to_formatted_s(:date) %></td>
             <td><%= regular_card_deck.num_games_won %></td>
