@@ -15,7 +15,12 @@
         <td><%= game_import.file_name %></td>
         <td><%= game_import.num_games_imported %></td>
         <td><%= link_to 'Show', game_import %></td>
-        <td><%= link_to 'Destroy', game_import, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <td>
+          <%= link_to(game_import, method: :delete, data: { confirm: 'Are you sure?' }) do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %> 
+        </td>
       </tr>
     <% end %>
   </tbody>

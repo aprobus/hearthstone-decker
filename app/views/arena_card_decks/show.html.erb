@@ -50,13 +50,16 @@
             <tr>
               <td><%= hero_name(game) %></td>
               <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
-              <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td>
+                <%= link_to(game, method: :delete, data: { confirm: 'Are you sure?' }) do %>
+                  <span class="glyphicon glyphicon-trash"></span>
+                <% end %>
+              </td>
             </tr>
         <% end %>
       </tbody>
     </table>
 
-    <%= link_to 'Edit', edit_arena_card_deck_path(@arena_card_deck) %> |
     <%= link_to 'Back', arena_card_decks_path %>
 
 </div>
