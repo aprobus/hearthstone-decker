@@ -1,25 +1,38 @@
-<div>
-  File Name: <%= @game_import.file_name %><br/>
-  Imported On: <%= @game_import.created_at %>
-</div>
-
-<h2>Games Imported</h2>
-<table class="table">
-  <thead>
-    <th>Game Type</th>
-    <th>Opponent</th>
-    <th>Result</th>
-  </thead>
-
-  <tbody>
-    <% @game_import.games.each do |game| %>
+<div class="row">
+  <div class="info-panel">
+    <table>
       <tr>
-        <td><%= game.mode.humanize %></td>
-        <td><%= hero_name(game) %></td>
-        <td><%= game.win_ind ? 'Win' : 'Loss' %></td>
+        <td class="right-align">File Name:</td><td class="left-padding"><%= @game_import.file_name %></td>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tr>
+        <td class="right-align">Imported On:</td><td class="left-padding"><%= @game_import.created_at.to_formatted_s(:date) %></td>
+      </tr>
+    </table>
+  </div>
 
-<%= link_to 'Back', game_imports_path %>
+  <h2>Imported</h2>
+  <table class="table">
+    <thead>
+      <th>Deck Type</th>
+      <th>Hero</th>
+      <th>Wins</th>
+      <th>Losses</th>
+      <th>Start Date</th>
+    </thead>
+
+    <tbody>
+      <% @game_import.card_decks.order(:created_at => :desc).each do |card_deck| %>
+        <tr class="link-row" data-href="<%= url_for(card_deck)  -%>">
+          <td><%= card_deck.class.name.underscore.humanize.split[0]  -%></td>
+          <td><%= hero_name(card_deck) -%></td>
+          <td><%= card_deck.num_games_won -%></td>
+          <td><%= card_deck.num_games_lost -%></td>
+          <td><%= card_deck.created_at.to_formatted_s(:date) -%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to 'Back', game_imports_path %>
+  </div>
+<br/>
