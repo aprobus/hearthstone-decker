@@ -15,7 +15,7 @@
   </div>
 
   <h1><%= link_to 'Arena Card Decks', arena_card_decks_stats_path %></h1>
-  <table class="table table-striped linked-rows">
+  <table class="table linked-rows">
     <thead>
       <tr>
         <th>Hero</th>
@@ -28,7 +28,7 @@
 
     <tbody>
       <% @arena_card_decks.each do |arena_card_deck| %>
-        <tr class="<%= arena_card_deck.add_games? ? 'info' : 'inactive' %> link-row" data-href="<%= url_for arena_card_deck %>">
+        <tr class="<%= arena_card_deck.add_games? ? 'add-games' : 'full-games' %> link-row" data-href="<%= url_for arena_card_deck %>">
           <td><%= hero_name(arena_card_deck) %></td>
           <td><%= arena_card_deck.created_at.to_formatted_s(:date) %></td>
           <td><%= arena_card_deck.num_games_won %></td>
